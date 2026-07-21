@@ -28,7 +28,7 @@
     image  : caminho da imagem do botão (assets/images/...)
     x      : posição horizontal em % da tela (0 = esquerda, 100 = direita)
     y      : posição vertical em % da tela (0 = topo, 100 = embaixo)
-    width  : largura do botão em % da largura da tela (ex: 10 = 10vw)
+    width  : largura do botão em % da largura da tela (ex: 10 = 10%)
     target : (só nos botões de navegação) id da cena para onde ele leva
 
   A cena inicial DEVE se chamar "inicio".

@@ -150,9 +150,11 @@
   }
 
   function buildSceneEl(id, scene) {
+    const bgUrl = getSceneBackground(id, scene);
+
     const el = document.createElement("div");
     el.className = "scene";
-    el.style.backgroundImage = `url("${getSceneBackground(id, scene)}")`;
+    el.style.backgroundImage = `url("${bgUrl}")`;
     el.dataset.sceneId = id;
 
     (scene.buttons || []).forEach(btn => {
@@ -160,7 +162,7 @@
       b.className = "scene-btn";
       b.style.left = btn.x + "%";
       b.style.top = btn.y + "%";
-      b.style.width = btn.width + "vw";
+      b.style.width = btn.width + "%";
       b.setAttribute("aria-label", "Ir para " + btn.target);
 
       const img = document.createElement("img");
@@ -180,7 +182,7 @@
       b.className = "scene-btn";
       b.style.left = tb.x + "%";
       b.style.top = tb.y + "%";
-      b.style.width = tb.width + "vw";
+      b.style.width = tb.width + "%";
       b.setAttribute("aria-label", "Alternar cenário");
 
       const img = document.createElement("img");
@@ -233,6 +235,7 @@
 
   startBtn.addEventListener("click", () => {
     startOverlay.classList.add("hidden");
+    tryEnterFullscreen();
     const initial = location.hash ? location.hash.slice(1) : "inicio";
     goToScene(scenes[initial] ? initial : "inicio");
   });
@@ -241,4 +244,13 @@
     const id = location.hash.slice(1);
     if (id && id !== currentSceneId && scenes[id]) goToScene(id);
   });
+
+  function tryEnterFullscreen() {
+    const el = document.documentElement;
+    const request =
+      el.requestFullscreen ||
+      el.webkitRequestFullscreen ||
+      el.msRequestFullscreen;
+    if (request) request.call(el).catch(() => {});
+  }
 })();

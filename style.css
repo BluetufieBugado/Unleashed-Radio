@@ -12,14 +12,38 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #0a0a0a;
+  background: #000;
   font-family: system-ui, sans-serif;
 }
 
+body {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+  #stage mantém a PROPORÇÃO das suas imagens de fundo (16:9 por padrão),
+  em vez de esticar/cortar pra preencher a tela toda. Isso evita que os
+  botões fiquem "fora de quadro" em celulares, cujo formato de tela é
+  bem diferente do de um PC.
+
+  Se suas imagens não forem 16:9, troque o valor de --stage-ratio abaixo
+  (ex: 4/3, 21/9, 1/1...).
+*/
+:root {
+  --stage-ratio: 16 / 9;
+}
+
 #stage {
+  container-type: inline-size;
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vw / (var(--stage-ratio)));
+  max-height: 100dvh;
+  max-width: calc(100dvh * (var(--stage-ratio)));
+  background: #000;
 }
 
 .scene {
@@ -46,6 +70,7 @@ html, body {
   border: none;
   padding: 0;
   cursor: pointer;
+  min-width: 40px;
   filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5));
   transition: transform 250ms ease, filter 250ms ease;
 }
@@ -69,8 +94,8 @@ html, body {
 
 #back-btn {
   position: fixed;
-  bottom: 28px;
-  left: 28px;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  left: calc(28px + env(safe-area-inset-left));
   width: 46px;
   height: 46px;
   border-radius: 50%;
@@ -145,8 +170,8 @@ html, body {
 
 #online-counter {
   position: fixed;
-  top: 24px;
-  right: 24px;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
   display: flex;
   align-items: center;
   gap: 8px;
@@ -206,8 +231,8 @@ html, body {
 
 #clock {
   position: fixed;
-  top: 24px;
-  left: 24px;
+  top: calc(24px + env(safe-area-inset-top));
+  left: calc(24px + env(safe-area-inset-left));
   display: flex;
   align-items: center;
   justify-content: center;
