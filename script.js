@@ -163,14 +163,24 @@
       b.style.left = btn.x + "%";
       b.style.top = btn.y + "%";
       b.style.width = btn.width + "%";
-      b.setAttribute("aria-label", "Ir para " + btn.target);
 
       const img = document.createElement("img");
       img.src = btn.image;
       img.alt = "";
       b.appendChild(img);
 
-      b.addEventListener("click", () => goToScene(btn.target));
+      if (btn.href) {
+        // link externo (ex: GitHub) — abre em uma aba nova
+        b.setAttribute("aria-label", "Abrir link externo");
+        b.addEventListener("click", () => {
+          window.open(btn.href, "_blank", "noopener");
+        });
+      } else {
+        // navegação interna, entre as páginas do site
+        b.setAttribute("aria-label", "Ir para " + btn.target);
+        b.addEventListener("click", () => goToScene(btn.target));
+      }
+
       el.appendChild(b);
     });
 

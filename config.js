@@ -10,7 +10,7 @@
     music      : caminho da música de fundo (assets/audio/...)
                  — só é usado se a cena NÃO tiver "variants"
     back       : (opcional) para qual cena o botão de "voltar" leva
-    buttons    : lista de botões-imagem que levam para OUTRAS páginas
+    buttons    : lista de botões-imagem (navegação interna OU links externos)
     showClock  : (opcional) true para mostrar o relógio em tempo real
                  no canto superior esquerdo dessa página
 
@@ -24,12 +24,17 @@
                     a variante seguinte (e volta ao início da lista depois
                     da última).
 
-  Cada botão (de navegação ou de alternância) tem:
+  Cada botão tem:
     image  : caminho da imagem do botão (assets/images/...)
     x      : posição horizontal em % da tela (0 = esquerda, 100 = direita)
     y      : posição vertical em % da tela (0 = topo, 100 = embaixo)
     width  : largura do botão em % da largura da tela (ex: 10 = 10%)
-    target : (só nos botões de navegação) id da cena para onde ele leva
+
+    E só UM dos dois abaixo:
+    target : id de outra cena deste site — navega internamente, com fade
+    href   : um link (ex: "https://github.com/seu-usuario/seu-repo") —
+             abre em uma aba nova, sem sair do site. Use isso pra links
+             externos como GitHub, redes sociais, etc.
 
   A cena inicial DEVE se chamar "inicio".
 
@@ -50,7 +55,8 @@ const scenes = {
       { image: "assets/images/flags/shamar-flag.png", target: "pagina-5", x: 20, y: 50, width: 7 },
       { image: "assets/images/flags/adabat-flag.png", target: "pagina-6", x: 65, y: 75, width: 7 },
       { image: "assets/images/flags/holoska-flag.png", target: "pagina-7", x: 45, y: 12, width: 7},
-      { image: "assets/images/sign-disclaimer.png", target: "disclaimer", x: 95, y: 90, width: 7}
+      { image: "assets/images/sign-disclaimer.png", target: "disclaimer", x: 95, y: 90, width: 7},
+      { image: "assets/images/github-icon.png", href: "https://github.com/BluetufieBugado/Unleashed-Radio", x: 5, y: 90, width: 6 }
     ]
   },
 
