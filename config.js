@@ -49,7 +49,8 @@ const scenes = {
       { image: "assets/images/flags/chun-nan-flag.png", target: "pagina-4", x: 65, y: 50, width: 7 },
       { image: "assets/images/flags/shamar-flag.png", target: "pagina-5", x: 20, y: 50, width: 7 },
       { image: "assets/images/flags/adabat-flag.png", target: "pagina-6", x: 65, y: 75, width: 7 },
-      { image: "assets/images/flags/holoska-flag.png", target: "pagina-7", x: 45, y: 10, width: 7}
+      { image: "assets/images/flags/holoska-flag.png", target: "pagina-7", x: 45, y: 12, width: 7},
+      { image: "assets/images/sign-disclaimer.png", target: "disclaimer", x: 95, y: 90, width: 7}
     ]
   },
 
@@ -126,6 +127,15 @@ const scenes = {
     ],
     toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
     showClock: true,
+    back: "inicio",
+    buttons: []
+  },
+  "disclaimer": {
+    variants: [
+      { background: "assets/images/disclaimer-ptbr.png", music: "assets/audio/world-adventure-piano.mp3" },
+      { background: "assets/images/disclaimer-ptbr.png", music: "assets/audio/world-adventure-piano.mp3" }
+    ],
+    showClock: false,
     back: "inicio",
     buttons: []
   }
