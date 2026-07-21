@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiência Interativa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="stage">
+    <!-- as cenas (fundo + botões) são geradas aqui pelo script.js -->
+  </div>
+
+  <button id="back-btn" aria-label="Voltar">
+    <svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <div id="start-overlay">
+    <button id="start-btn" aria-label="Começar">
+      <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+  <audio id="bg-audio-a" loop preload="auto"></audio>
+  <audio id="bg-audio-b" loop preload="auto"></audio>
+
+  <div id="online-counter" aria-label="Pessoas online nesta página">
+    <span class="dot"></span>
+    <span id="online-count">0</span>
+  </div>
+
+  <div id="clock" class="glass" aria-label="Horário atual">
+    <span id="clock-time">00:00:00</span>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
