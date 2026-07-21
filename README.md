@@ -1,3 +1,5 @@
+![Oficial Logo](unleashed-radio-logo.png)
+
 # Sobre este site
 Este é um site simples de páginas encadeadas: cada página tem uma imagem de
 fundo, uma música de fundo, e botões (também em forma de imagem) que levam a
