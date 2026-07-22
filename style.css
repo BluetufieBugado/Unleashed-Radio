@@ -127,6 +127,34 @@ body {
   height: 20px;
 }
 
+#fullscreen-btn {
+  position: fixed;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  right: calc(28px + env(safe-area-inset-right));
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 300ms ease, background 200ms ease;
+  z-index: 20;
+}
+
+#fullscreen-btn:hover {
+  background: rgba(0,0,0,0.55);
+}
+
+#fullscreen-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
 #start-overlay {
   position: fixed;
   inset: 0;

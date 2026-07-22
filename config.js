@@ -55,8 +55,8 @@ const scenes = {
       { image: "assets/images/flags/shamar-flag.png", target: "pagina-5", x: 20, y: 50, width: 7 },
       { image: "assets/images/flags/adabat-flag.png", target: "pagina-6", x: 65, y: 75, width: 7 },
       { image: "assets/images/flags/holoska-flag.png", target: "pagina-7", x: 45, y: 12, width: 7},
-      { image: "assets/images/sign-disclaimer.png", target: "disclaimer", x: 95, y: 90, width: 7},
-      { image: "assets/images/github-icon.png", href: "https://github.com/BluetufieBugado/Unleashed-Radio", x: 5, y: 90, width: 6 }
+      { image: "assets/images/UI_Buttons/sign-disclaimer.png", target: "disclaimer", x: 95, y: 90, width: 7},
+      { image: "assets/images/UI_Buttons/github-icon.png", href: "https://github.com/BluetufieBugado/Unleashed-Radio", x: 5, y: 90, width: 6 }
     ]
   },
 
@@ -65,7 +65,7 @@ const scenes = {
       { background: "assets/images/hubs/apotos-day-hub.png", music: "assets/audio/apotos-day.mp3" },
       { background: "assets/images/hubs/apotos-night-hub.png", music: "assets/audio/apotos-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -76,7 +76,7 @@ const scenes = {
       { background: "assets/images/hubs/mazuri-day-hub.png", music: "assets/audio/mazuri-day.mp3" },
       { background: "assets/images/hubs/mazuri-night-hub.png", music: "assets/audio/mazuri-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -87,7 +87,7 @@ const scenes = {
       { background: "assets/images/hubs/spagonia-day-hub.png", music: "assets/audio/spagonia-day.mp3" },
       { background: "assets/images/hubs/spagonia-night-hub.png", music: "assets/audio/spagonia-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -98,7 +98,7 @@ const scenes = {
       { background: "assets/images/hubs/chun-nan-day-hub.png", music: "assets/audio/chun-nan-day.mp3" },
       { background: "assets/images/hubs/chun-nan-night-hub.png", music: "assets/audio/chun-nan-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -109,7 +109,7 @@ const scenes = {
       { background: "assets/images/hubs/shamar-day-hub.png", music: "assets/audio/shamar-day.mp3" },
       { background: "assets/images/hubs/shamar-night-hub.png", music: "assets/audio/shamar-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -120,7 +120,7 @@ const scenes = {
       { background: "assets/images/hubs/adabat-day-hub.png", music: "assets/audio/adabat-day.mp3" },
       { background: "assets/images/hubs/adabat-night-hub.png", music: "assets/audio/adabat-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []
@@ -131,7 +131,7 @@ const scenes = {
       { background: "assets/images/hubs/holoska-day-hub.png", music: "assets/audio/holoska-day.mp3" },
       { background: "assets/images/hubs/holoska-night-hub.png", music: "assets/audio/holoska-night.mp3" }
     ],
-    toggleButton: { image: "assets/images/day-night-toggle.png", x: 90, y: 12, width: 8 },
+    toggleButton: { image: "assets/images/UI_Buttons/day-night-toggle.png", x: 90, y: 12, width: 10 },
     showClock: true,
     back: "inicio",
     buttons: []

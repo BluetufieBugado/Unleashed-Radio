@@ -72,46 +72,46 @@
     clockEl.classList.toggle("visible", !!scene.showClock);
   }
 
-  // identificador único desta aba/visita — usado para saber quem entrou
-  // e quem saiu de cada página+variante
+  // ---------- CONTADOR DE PRESENÇA (via Cloudflare Worker + D1) ----------
+  // Troque pela URL que a Cloudflare te der depois do deploy do Worker
+  // (ver worker/README dentro do projeto). Enquanto estiver com o valor
+  // de exemplo, o contador simplesmente fica mostrando "0", sem travar
+  // nada no resto do site.
+  const PRESENCE_API = "https://unleashed-radio.fenixp2br22096627.workers.dev";
+  const HEARTBEAT_INTERVAL_MS = 20000; // a cada 20s
+
+  // identificador único desta aba/visita
   const sessionId = (crypto.randomUUID ? crypto.randomUUID() : "s" + Math.random().toString(36).slice(2));
 
-  let presenceRef = null;
-  let presenceCountRef = null;
-  let presenceCountHandler = null;
+  let presenceTimer = null;
 
-  function firebaseReady() {
-    return typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0;
+  function sendHeartbeat(id, variantIdx) {
+    fetch(`${PRESENCE_API}/heartbeat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session: sessionId, scene: id, variant: variantIdx }),
+    }).catch(() => {});
+  }
+
+  function fetchCount(id, variantIdx) {
+    fetch(`${PRESENCE_API}/count?scene=${encodeURIComponent(id)}&variant=${variantIdx}`)
+      .then(r => r.json())
+      .then(data => {
+        if (typeof data.count === "number") onlineCountEl.textContent = data.count;
+      })
+      .catch(() => {});
   }
 
   function updatePresence(id, variantIdx) {
-    if (!firebaseReady()) return; // firebase-config.js ainda não foi preenchido
+    if (presenceTimer) clearInterval(presenceTimer);
 
-    // sai da posição anterior (página+variante que o usuário deixou)
-    if (presenceRef) {
-      presenceRef.onDisconnect().cancel();
-      presenceRef.remove();
-    }
-    if (presenceCountRef && presenceCountHandler) {
-      presenceCountRef.off("value", presenceCountHandler);
-    }
-
-    // entra na nova posição (página+variante atual)
-    const path = `presence/${id}/${variantIdx}`;
-    presenceRef = firebase.database().ref(path).child(sessionId);
-    presenceRef.set(true);
-    presenceRef.onDisconnect().remove(); // some sozinho se a pessoa fechar a aba
-
-    presenceCountRef = firebase.database().ref(path);
-    presenceCountHandler = presenceCountRef.on("value", snap => {
-      const count = snap.exists() ? Object.keys(snap.val()).length : 0;
-      onlineCountEl.textContent = count;
-    });
+    const tick = () => {
+      sendHeartbeat(id, variantIdx);
+      fetchCount(id, variantIdx);
+    };
+    tick(); // manda o primeiro sinal na hora, sem esperar o intervalo
+    presenceTimer = setInterval(tick, HEARTBEAT_INTERVAL_MS);
   }
-
-  window.addEventListener("beforeunload", () => {
-    if (presenceRef) presenceRef.remove();
-  });
 
   function fadeAudio(el, from, to, ms) {
     const steps = FADE_STEPS;
@@ -245,7 +245,6 @@
 
   startBtn.addEventListener("click", () => {
     startOverlay.classList.add("hidden");
-    tryEnterFullscreen();
     const initial = location.hash ? location.hash.slice(1) : "inicio";
     goToScene(scenes[initial] ? initial : "inicio");
   });
@@ -255,12 +254,48 @@
     if (id && id !== currentSceneId && scenes[id]) goToScene(id);
   });
 
-  function tryEnterFullscreen() {
-    const el = document.documentElement;
-    const request =
-      el.requestFullscreen ||
-      el.webkitRequestFullscreen ||
-      el.msRequestFullscreen;
-    if (request) request.call(el).catch(() => {});
+  // ---------- BOTÃO DE TELA CHEIA ----------
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const iconEnter = document.getElementById("fullscreen-icon-enter");
+  const iconExit = document.getElementById("fullscreen-icon-exit");
+
+  function isFullscreen() {
+    return !!(
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement
+    );
   }
+
+  function updateFullscreenIcon() {
+    const active = isFullscreen();
+    iconEnter.style.display = active ? "none" : "";
+    iconExit.style.display = active ? "" : "none";
+    fullscreenBtn.setAttribute("aria-label", active ? "Sair da tela cheia" : "Tela cheia");
+  }
+
+  function toggleFullscreen() {
+    const el = document.documentElement;
+    if (!isFullscreen()) {
+      const request =
+        el.requestFullscreen ||
+        el.webkitRequestFullscreen ||
+        el.msRequestFullscreen;
+      if (request) request.call(el).catch(() => {});
+    } else {
+      const exit =
+        document.exitFullscreen ||
+        document.webkitExitFullscreen ||
+        document.msExitFullscreen;
+      if (exit) exit.call(document).catch(() => {});
+    }
+  }
+
+  fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+  // mantém o ícone certo mesmo se o usuário sair com ESC, F11, etc.
+  ["fullscreenchange", "webkitfullscreenchange", "msfullscreenchange"].forEach(evt =>
+    document.addEventListener(evt, updateFullscreenIcon)
+  );
+  updateFullscreenIcon();
 })();

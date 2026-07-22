@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Unleashed Radio Virtual Space</title>
 <link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
 
@@ -14,6 +15,11 @@
 
   <button id="back-btn" aria-label="Voltar">
     <svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <button id="fullscreen-btn" aria-label="Tela cheia">
+    <svg id="fullscreen-icon-enter" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg id="fullscreen-icon-exit" viewBox="0 0 24 24" style="display:none"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 
   <div id="start-overlay">
@@ -34,9 +40,6 @@
     <span id="clock-time">00:00:00</span>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-  <script src="firebase-config.js"></script>
   <script src="config.js"></script>
   <script src="script.js"></script>
 </body>

@@ -1,0 +1,15 @@
+# Esse arquivo só é necessário se você optar por fazer o deploy via linha de
+# comando (Wrangler CLI) em vez de colar o código direto no painel da
+# Cloudflare. Se for usar o painel, pode ignorar este arquivo.
+
+name = "unleashed-radio-presence"
+main = "src/index.js"
+compatibility_date = "2026-07-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "unleashed-radio-presence"
+database_id = "COLOQUE_AQUI_O_ID_DO_BANCO"
+
+[triggers]
+crons = ["0 * * * *"]
