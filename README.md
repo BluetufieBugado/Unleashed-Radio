@@ -42,6 +42,12 @@ fazendo coisas que prefiro nem imaginar. Talvez um sistema de mensagens prontas
 seja incluído no futuro, com frases como "gosto desse lugar" e "este é meu país
 preferido".
 
+## Como funciona o sistema "Online" do site? 
+
+Toda vez que um usuário entra no site, após 20 segundos, ele envia um sinal ao CloudFlare indicando que ele está no site, e isso faz o contador adicionar um número a mais no contador.
+Da mesma forma, quando você sair da página, ele vai demorar cerca de 20 a 40 segundos para remover esse número que indicaria a sua presença ouvindo aquela música. 
+Não é muito diferente dos sistemas online atuais, como em lives do YouTube, por exemplo. 
+
 ## Agradecimentos especiais e créditos
 
 A imagem de fundo do planeta terra de Sonic Unleashed foi rippada e postada na internet por: [Sonic Konga](https://www.deviantart.com/sonic-konga/art/World-Map-Sonic-Unleashed-854480210)
