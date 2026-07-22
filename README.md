@@ -44,8 +44,8 @@ preferido".
 
 ## Agradecimentos especiais e créditos
 
-A imagem de fundo do planeta terra de Sonic Unleashed foi rippada e postada na internet por: ![Sonic Konga](https://www.deviantart.com/sonic-konga/art/World-Map-Sonic-Unleashed-854480210)
+A imagem de fundo do planeta terra de Sonic Unleashed foi rippada e postada na internet por: [Sonic Konga](https://www.deviantart.com/sonic-konga/art/World-Map-Sonic-Unleashed-854480210)
 
-As bandeiras dos paises em HD, usadas na página principal, foram feitas por: ![Piexter](https://www.reddit.com/r/SonicTheHedgehog/comments/sxwtgy/recreated_flags_from_sonic_unleashed/?solution=bc75a621bce368f3bc75a621bce368f3&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9ec3618cdffb27128858707b972042cbb37&jsc_orig_r=)
+As bandeiras dos paises em HD, usadas na página principal, foram feitas por: [Piexter](https://www.reddit.com/r/SonicTheHedgehog/comments/sxwtgy/recreated_flags_from_sonic_unleashed/?solution=bc75a621bce368f3bc75a621bce368f3&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9ec3618cdffb27128858707b972042cbb37&jsc_orig_r=)
 
-O ícone de medalha de sol e lua no canto superior direito foi criada por: ![boilingpot](https://www.spriters-resource.com/playstation_2/sonicunleashed/asset/122017/)
+O ícone de medalha de sol e lua no canto superior direito foi criada por: [boilingpot](https://www.spriters-resource.com/playstation_2/sonicunleashed/asset/122017/)
