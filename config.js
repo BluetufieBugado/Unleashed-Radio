@@ -24,6 +24,24 @@
                     a variante seguinte (e volta ao início da lista depois
                     da última).
 
+    character     : (opcional) uma imagem de personagem por cima do fundo
+                    (ex: Tails, Amy). Não tem interação, é só visual/narrativo.
+                      image : caminho da imagem (com fundo transparente)
+                      x, y  : posição em % — aqui "y" marca onde os PÉS do
+                              personagem tocam o chão (a imagem cresce pra
+                              cima a partir desse ponto)
+                      width : largura em % da largura da tela
+
+    textbox       : (opcional) uma caixa de texto DE VERDADE (não é imagem),
+                    então dá pra traduzir com o navegador (Google Tradutor,
+                    etc) e usa a fonte Seurat Pro.
+                      x, y  : x = centro horizontal em %, y = topo da caixa em %
+                      width : largura da caixa em %
+                      align : (opcional) "left" (padrão) / "center" / "right"
+                      text  : lista de parágrafos (cada item vira um <p>)
+                      logos : (opcional) lista de { image, width } mostrada
+                              em linha, embaixo do texto (ex: logo da SEGA)
+
   Cada botão tem:
     image  : caminho da imagem do botão (assets/images/...)
     x      : posição horizontal em % da tela (0 = esquerda, 100 = direita)
@@ -137,13 +155,34 @@ const scenes = {
     buttons: []
   },
   "disclaimer": {
-    variants: [
-      { background: "assets/images/disclaimer-ptbr.png", music: "assets/audio/world-adventure-piano.mp3" },
-      { background: "assets/images/disclaimer-ptbr.png", music: "assets/audio/world-adventure-piano.mp3" }
-    ],
+    background: "assets/images/disclaimer-bg-unleashedradio.png",
+    music: "assets/audio/world-adventure-piano.mp3",
     showClock: false,
     back: "inicio",
-    buttons: []
+    buttons: [],
+    character: {
+      image: "assets/images/tails-talk-sprite.png",
+      x: 30,
+      y: 101,
+      width: 38
+    },
+    textbox: {
+      x: 84,
+      y: 6,
+      width: 27,
+      text: [
+        "O intuito deste site não é em hipótese alguma se passar por algo oficial ou roubar a marca Sonic.",
+        "Este é um projeto de fan para fans, voltado com o intuito de criar um espaço virtual coletivo, para ouvir as músicas de Sonic Unleashed e explorar outras mídias do jogo.",
+        "Todos os direitos das faixas, imagens e personagens são reservados a:"
+      ],
+      logos: [
+        { image: "assets/images/logos/sega-logo.png", width: 60 },
+        { image: "assets/images/logos/sonicteam-logo.png", width: 60 }
+        // depois que você tiver os arquivos, é só descomentar e ajustar:
+        // { image: "assets/images/logos/sega-logo.png", width: 40 },
+        // { image: "assets/images/logos/sonicteam-logo.png", width: 40 }
+      ]
+    }
   }
 
 };

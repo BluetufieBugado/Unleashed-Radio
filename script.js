@@ -209,6 +209,59 @@
       el.appendChild(b);
     }
 
+    // personagem estático por cima do fundo (ex: Tails, Amy) — sem clique,
+    // só decorativo/narrativo. x/y marcam onde os "pés" tocam o chão.
+    if (scene.character) {
+      const ch = scene.character;
+      const wrap = document.createElement("div");
+      wrap.className = "scene-character";
+      wrap.style.left = ch.x + "%";
+      wrap.style.top = ch.y + "%";
+      wrap.style.width = ch.width + "%";
+
+      const img = document.createElement("img");
+      img.src = ch.image;
+      img.alt = "";
+      wrap.appendChild(img);
+
+      el.appendChild(wrap);
+    }
+
+    // caixa de texto real (não é imagem) — dá pra traduzir com o navegador.
+    // x = centro horizontal em %, y = topo em %, width = largura em %.
+    // "text" é uma lista de parágrafos; "logos" (opcional) é uma lista de
+    // { image, width } mostrada em linha, embaixo do texto.
+    if (scene.textbox) {
+      const tb = scene.textbox;
+      const box = document.createElement("div");
+      box.className = "textbox";
+      box.style.left = tb.x + "%";
+      box.style.top = tb.y + "%";
+      box.style.width = tb.width + "%";
+      if (tb.align) box.style.textAlign = tb.align;
+
+      (tb.text || []).forEach(paragraph => {
+        const p = document.createElement("p");
+        p.textContent = paragraph;
+        box.appendChild(p);
+      });
+
+      if (tb.logos && tb.logos.length) {
+        const logosRow = document.createElement("div");
+        logosRow.className = "textbox-logos";
+        tb.logos.forEach(logo => {
+          const img = document.createElement("img");
+          img.src = logo.image;
+          img.alt = "";
+          if (logo.width) img.style.width = logo.width + "%";
+          logosRow.appendChild(img);
+        });
+        box.appendChild(logosRow);
+      }
+
+      el.appendChild(box);
+    }
+
     return el;
   }
 

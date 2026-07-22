@@ -2,6 +2,14 @@
   --transition-speed: 900ms;
 }
 
+@font-face {
+  font-family: "Seurat Pro";
+  src: url("assets/fonts/FOT-Seurat_Pro_M.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -280,5 +288,56 @@ body {
 #clock.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ---------- PERSONAGEM ESTÁTICO (ex: Tails, Amy) ---------- */
+/* posicionado como um botão, mas sem interação — x/y marcam onde os
+   "pés" do personagem tocam o chão */
+.scene-character {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5));
+}
+
+.scene-character img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ---------- CAIXA DE TEXTO (disclaimer, diálogos de NPC, etc) ---------- */
+/* x/y/width em % do stage — x é o centro horizontal, y é a borda de cima */
+.textbox {
+  position: absolute;
+  transform: translate(-50%, 0);
+  font-family: "Seurat Pro", system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  line-height: 1.5;
+  padding: 2cqw;
+}
+
+.textbox p {
+  font-size: 1.7cqw;
+  margin-bottom: 1.1em;
+}
+
+.textbox p:last-child {
+  margin-bottom: 0;
+}
+
+.textbox-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqw;
+  margin-top: 1.2cqw;
+}
+
+.textbox-logos img {
+  height: 4.5cqw;
+  width: auto;
+  display: block;
 }
 
