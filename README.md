@@ -50,9 +50,7 @@ Não é muito diferente dos sistemas online atuais, como em lives do YouTube, po
 
 ## Você usou IA em alguma parte desse projeto?
 
-Sim, infelizmente para alguns e felizmente para outros. Sendo sincero eu não sou um expert em programação, nunca tinha desenvolvido um projeto como esse antes então o Claude foi uma ferramenta de grande ajuda na construção deste site e implementação de varias funções. Além disso, utilizei o ChatGPT para melhorar a qualidade de ícones e outros aspectos pequenos que ao serem extraidos do jogo não tinham uma qualidade boa o suficiente para serem incluidas no site. Como exemplo posso mencionar os ícones da Biblioteca de Spagonia que foram retirados da Versão de Nintendo Wii, mas ao invés de fazer um RIP direto do jogo eu usei capturas de tela e solicitei uma reconstrução do asset para o ChatGPT. Aqui deixarei um exemplo de a imagem original do jogo, em comparação com a versão "remasterizada" que o GPT criou:
-
-<img width="2690" height="1169" alt="upscale-example" src="https://github.com/user-attachments/assets/c6654028-69ca-48b8-8d00-e516e67bb350" />
+Sim, infelizmente para alguns e felizmente para outros. Sendo sincero eu não sou um expert em programação, nunca tinha desenvolvido um projeto como esse antes então o Claude foi uma ferramenta de grande ajuda na construção deste site e implementação de varias funções. Além disso, utilizei o ChatGPT para melhorar a qualidade de ícones e outros aspectos pequenos que ao serem extraidos do jogo não tinham uma qualidade boa o suficiente para serem incluidas no site. Como exemplo posso mencionar os ícones da Biblioteca de Spagonia que foram retirados da Versão de Nintendo Wii, mas ao invés de fazer um RIP direto do jogo eu usei capturas de tela e solicitei uma reconstrução do asset para o ChatGPT. 
 
 Outro detalhe que muitos vão notar é a Biblioteca/Laboratório do Professor Pickle, o fundo foi completamente remasterizado e foi adicionado uma TV e um tocador de Vinil que aparecem no jogo original, com o auxilio do GPT. 
 
@@ -65,5 +63,3 @@ A imagem de fundo do planeta terra de Sonic Unleashed foi rippada e postada na i
 As bandeiras dos paises em HD, usadas na página principal, foram feitas por: [Piexter](https://www.reddit.com/r/SonicTheHedgehog/comments/sxwtgy/recreated_flags_from_sonic_unleashed/?solution=bc75a621bce368f3bc75a621bce368f3&js_challenge=1&token=7afd7253fec22262ff1c52b1703fe9ec3618cdffb27128858707b972042cbb37&jsc_orig_r=)
 
 O ícone de medalha de sol e lua no canto superior direito foi criada por: [boilingpot](https://www.spriters-resource.com/playstation_2/sonicunleashed/asset/122017/)
-
-As Cutcenes desse projeto, presentes no laboratório do professor pickle, foram ripadas e postadas na internet por [SEGA & Matthew Poulin](https://archive.org/details/sonic-unleashed-english-cutscenes), então os créditos por esse trabalho ficam reservados ao mesmo.
