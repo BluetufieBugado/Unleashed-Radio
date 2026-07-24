@@ -50,11 +50,11 @@ Não é muito diferente dos sistemas online atuais, como em lives do YouTube, po
 
 ## Você usou IA em alguma parte desse projeto?
 
-Sim, infelizmente para alguns e felizmente para outros. Sendo sincero eu não sou um expert em programação, nunca tinha desenvolvido um projeto como esse antes então o Claude foi uma ferramenta de grande ajuda na construção deste site e implementação de varias funções. Além disso, utilizei o ChatGPT para melhorar a qualidade de ícones e outros aspectos pequenos que ao serem extraidos do jogo não tinham uma qualidade boa o suficiente para serem incluidas no site. Como exemplo posso mencionar os ícones da Biblioteca de Spagonia que foram retirados da Versão de Nintendo Wii, mas ao invés de fazer um RIP direto do jogo eu usei capturas de tela e solicitei uma reconstrução do asset para o ChatGPT. 
-
-Outro detalhe que muitos vão notar é a Biblioteca/Laboratório do Professor Pickle, o fundo foi completamente remasterizado e foi adicionado uma TV e um tocador de Vinil que aparecem no jogo original, com o auxilio do GPT. Aqui deixarei um exemplo de a imagem original do jogo, em comparação com a versão "remasterizada" que o GPT criou:
+Sim, infelizmente para alguns e felizmente para outros. Sendo sincero eu não sou um expert em programação, nunca tinha desenvolvido um projeto como esse antes então o Claude foi uma ferramenta de grande ajuda na construção deste site e implementação de varias funções. Além disso, utilizei o ChatGPT para melhorar a qualidade de ícones e outros aspectos pequenos que ao serem extraidos do jogo não tinham uma qualidade boa o suficiente para serem incluidas no site. Como exemplo posso mencionar os ícones da Biblioteca de Spagonia que foram retirados da Versão de Nintendo Wii, mas ao invés de fazer um RIP direto do jogo eu usei capturas de tela e solicitei uma reconstrução do asset para o ChatGPT. Aqui deixarei um exemplo de a imagem original do jogo, em comparação com a versão "remasterizada" que o GPT criou:
 
 <img width="2690" height="1169" alt="upscale-example" src="https://github.com/user-attachments/assets/c6654028-69ca-48b8-8d00-e516e67bb350" />
+
+Outro detalhe que muitos vão notar é a Biblioteca/Laboratório do Professor Pickle, o fundo foi completamente remasterizado e foi adicionado uma TV e um tocador de Vinil que aparecem no jogo original, com o auxilio do GPT. 
 
 Em resumo, o Claude me ajudou na programação e o GPT foi usado para aumentar a qualidade de imagens. Não quero que esse site pareça um "AI Slop" então, não se preocupem, estou tomando cuidado para não abusar da ferramenta ou colocar coisas sem alma e gênericas no site.
 
