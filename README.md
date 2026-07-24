@@ -48,6 +48,14 @@ Toda vez que um usuário entra no site, após 20 segundos, ele envia um sinal ao
 Da mesma forma, quando você sair da página, ele vai demorar cerca de 20 a 40 segundos para remover esse número que indicaria a sua presença ouvindo aquela música. 
 Não é muito diferente dos sistemas online atuais, como em lives do YouTube, por exemplo. 
 
+## Você usou IA em alguma parte desse projeto?
+
+Sim, infelizmente para alguns e felizmente para outros. Sendo sincero eu não sou um expert em programação, nunca tinha desenvolvido um projeto como esse antes então o Claude foi uma ferramenta de grande ajuda na construção deste site e implementação de varias funções. Além disso, utilizei o ChatGPT para melhorar a qualidade de ícones e outros aspectos pequenos que ao serem extraidos do jogo não tinham uma qualidade boa o suficiente para serem incluidas no site. Como exemplo posso mencionar os ícones da Biblioteca de Spagonia que foram retirados da Versão de Nintendo Wii, mas ao invés de fazer um RIP direto do jogo eu usei capturas de tela e solicitei uma reconstrução do asset para o ChatGPT. 
+
+Outro detalhe que muitos vão notar é a Biblioteca/Laboratório do Professor Pickle, o fundo foi completamente remasterizado e foi adicionado uma TV e um tocador de Vinil que aparecem no jogo original, com o auxilio do GPT. 
+
+Em resumo, o Claude me ajudou na programação e o GPT foi usado para aumentar a qualidade de imagens. Não quero que esse site pareça um "AI Slop" então, não se preocupem, estou tomando cuidado para não abusar da ferramenta ou colocar coisas sem alma e gênericas no site.
+
 ## Agradecimentos especiais e créditos
 
 A imagem de fundo do planeta terra de Sonic Unleashed foi rippada e postada na internet por: [Sonic Konga](https://www.deviantart.com/sonic-konga/art/World-Map-Sonic-Unleashed-854480210)

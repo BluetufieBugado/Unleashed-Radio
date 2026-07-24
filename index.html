@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- necessário pro player embutido do YouTube funcionar (evita o "Erro 153:
+     Erro de configuração do player de vídeo") -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Unleashed Radio Virtual Space</title>
 <link rel="stylesheet" href="style.css">
 <link rel="icon" type="image/png" href="assets/images/favicon.png">
@@ -30,6 +33,77 @@
 
   <audio id="bg-audio-a" loop preload="auto"></audio>
   <audio id="bg-audio-b" loop preload="auto"></audio>
+
+  <!-- galeria: grade de miniaturas, aberta pelos botões com "gallery" no config.js -->
+  <div id="gallery-overlay">
+    <div id="gallery-header">
+      <h2 id="gallery-title"></h2>
+      <button id="gallery-close-btn" aria-label="Fechar galeria">&times;</button>
+    </div>
+    <div id="gallery-grid"></div>
+  </div>
+
+  <!-- visualizador em tela cheia: abre ao clicar numa miniatura da galeria -->
+  <div id="lightbox-overlay">
+    <button id="lightbox-close-btn" aria-label="Fechar imagem">&times;</button>
+    <button id="lightbox-prev-btn" aria-label="Imagem anterior">&#8249;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button id="lightbox-next-btn" aria-label="Próxima imagem">&#8250;</button>
+  </div>
+
+  <!-- player de música: abre pelos botões com "player" no config.js -->
+  <div id="player-overlay">
+    <button id="player-close-btn" aria-label="Fechar player">&times;</button>
+
+    <div id="player-card" class="glass">
+      <img id="player-cover" src="" alt="">
+      <h2 id="player-track-title"></h2>
+      <p id="player-track-region"></p>
+
+      <div id="player-progress-track">
+        <div id="player-progress-fill"></div>
+      </div>
+      <div id="player-times">
+        <span id="player-time-current">0:00</span>
+        <span id="player-time-duration">0:00</span>
+      </div>
+
+      <div id="player-controls">
+        <button id="player-prev-btn" aria-label="Faixa anterior">
+          <svg viewBox="0 0 24 24"><path d="M17 4v16M17 12L6 5v14l11-7z" fill="currentColor"/></svg>
+        </button>
+        <button id="player-playpause-btn" aria-label="Tocar">
+          <svg id="player-play-icon" viewBox="0 0 24 24"><path d="M7 4l14 8-14 8V4z" fill="currentColor"/></svg>
+          <svg id="player-pause-icon" viewBox="0 0 24 24" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>
+        </button>
+        <button id="player-next-btn" aria-label="Próxima faixa">
+          <svg viewBox="0 0 24 24"><path d="M7 4v16M7 12l11-7v14L7 12z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <audio id="player-audio" preload="none"></audio>
+  </div>
+
+  <!-- galeria de cutscenes: grade de miniaturas, aberta pelos botões com "videoGallery" no config.js -->
+  <div id="video-gallery-overlay">
+    <div id="video-gallery-header">
+      <h2 id="video-gallery-title"></h2>
+      <button id="video-gallery-close-btn" aria-label="Fechar cutscenes">&times;</button>
+    </div>
+    <div id="video-gallery-grid"></div>
+  </div>
+
+  <!-- vídeo em tela cheia: abre ao clicar numa miniatura da galeria de cutscenes -->
+  <div id="video-lightbox-overlay">
+    <button id="video-lightbox-close-btn" aria-label="Fechar vídeo">&times;</button>
+    <button id="video-lightbox-prev-btn" aria-label="Cutscene anterior">&#8249;</button>
+    <video id="video-lightbox-player" controls playsinline></video>
+    <div id="video-lightbox-youtube-wrap">
+      <div id="video-lightbox-youtube"></div>
+    </div>
+    <button id="video-lightbox-next-btn" aria-label="Próxima cutscene">&#8250;</button>
+  </div>
 
   <div id="online-counter" aria-label="Pessoas online nesta página">
     <span class="dot"></span>

@@ -341,3 +341,517 @@ body {
   display: block;
 }
 
+/* ---------- GALERIA (grade de miniaturas) ---------- */
+#gallery-overlay {
+  position: fixed;
+  inset: 0;
+  /* sem backdrop-filter aqui: blur em tela cheia é pesado pro processador,
+     principalmente durante a transição de abertura — a opacidade mais
+     alta já deixa o fundo escuro o suficiente sem esse custo */
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+  padding: calc(24px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+}
+
+#gallery-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+#gallery-title {
+  color: rgba(255, 255, 255, 0.95);
+  font-family: "Seurat Pro", system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 22px;
+}
+
+#gallery-close-btn,
+#lightbox-close-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+#gallery-close-btn:hover,
+#lightbox-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#gallery-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.gallery-thumb {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  padding: 0;
+  aspect-ratio: 16 / 9;
+  transition: transform 200ms ease, border-color 200ms ease;
+}
+
+.gallery-thumb:hover,
+.gallery-thumb:focus-visible {
+  transform: scale(1.03);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- LIGHTBOX (imagem em tela cheia, com setas) ---------- */
+#lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+#lightbox-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#lightbox-img {
+  max-width: 88%;
+  max-height: 88%;
+  object-fit: contain;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+#lightbox-close-btn {
+  position: absolute;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
+}
+
+#lightbox-prev-btn,
+#lightbox-next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+#lightbox-prev-btn:hover,
+#lightbox-next-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#lightbox-prev-btn {
+  left: calc(20px + env(safe-area-inset-left));
+}
+
+#lightbox-next-btn {
+  right: calc(20px + env(safe-area-inset-right));
+}
+
+/* ---------- MUSIC PLAYER ---------- */
+#player-overlay {
+  position: fixed;
+  inset: 0;
+  /* sem backdrop-filter aqui pelo mesmo motivo da galeria — o card em si
+     (#player-card) continua com o efeito "vidro" de verdade, só é pequeno */
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+  padding: 24px;
+}
+
+#player-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#player-close-btn {
+  position: absolute;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+#player-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#player-card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#player-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#player-track-title {
+  color: rgba(255, 255, 255, 0.95);
+  font-family: "Seurat Pro", system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 19px;
+  margin-bottom: 4px;
+}
+
+#player-track-region {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+#player-progress-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+#player-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+#player-times {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 22px;
+}
+
+#player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+#player-controls button {
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 150ms ease, color 150ms ease;
+}
+
+#player-controls button:hover {
+  color: #fff;
+  transform: scale(1.08);
+}
+
+#player-prev-btn svg,
+#player-next-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+#player-playpause-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#player-playpause-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------- GALERIA DE CUTSCENES (grade com título por vídeo) ---------- */
+#video-gallery-overlay {
+  position: fixed;
+  inset: 0;
+  /* sem backdrop-filter aqui pelo mesmo motivo da galeria de imagens */
+  background: rgba(0, 0, 0, 0.94);
+  z-index: 42;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+  padding: calc(24px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+}
+
+#video-gallery-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#video-gallery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+#video-gallery-title {
+  color: rgba(255, 255, 255, 0.95);
+  font-family: "Seurat Pro", system-ui, sans-serif;
+  font-weight: normal;
+  font-size: 22px;
+}
+
+#video-gallery-close-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+#video-gallery-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#video-gallery-grid {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.video-thumb {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: transform 200ms ease, border-color 200ms ease;
+}
+
+.video-thumb:hover,
+.video-thumb:focus-visible {
+  transform: scale(1.02);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.video-thumb-image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.video-thumb-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-thumb-play-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-thumb-play-icon svg {
+  width: 40px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+}
+
+.video-thumb-title {
+  display: block;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* ---------- LIGHTBOX DE VÍDEO (cutscene em tela cheia, com setas) ---------- */
+#video-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.97);
+  z-index: 52;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+#video-lightbox-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#video-lightbox-player {
+  max-width: 88%;
+  max-height: 88%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* player embutido do YouTube: mesmo espaço do vídeo local, mas com
+   proporção fixa 16:9 (o iframe do YouTube substitui a div interna) */
+#video-lightbox-youtube-wrap {
+  display: none;
+  width: 88%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+#video-lightbox-youtube-wrap.visible {
+  display: block;
+}
+
+#video-lightbox-youtube-wrap iframe,
+#video-lightbox-youtube {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+#video-lightbox-close-btn {
+  position: absolute;
+  top: calc(24px + env(safe-area-inset-top));
+  right: calc(24px + env(safe-area-inset-right));
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+  z-index: 1;
+}
+
+#video-lightbox-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#video-lightbox-prev-btn,
+#video-lightbox-next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+  z-index: 1;
+}
+
+#video-lightbox-prev-btn:hover,
+#video-lightbox-next-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#video-lightbox-prev-btn {
+  left: calc(20px + env(safe-area-inset-left));
+}
+
+#video-lightbox-next-btn {
+  right: calc(20px + env(safe-area-inset-right));
+}
+

@@ -149,6 +149,24 @@
     idleAudio = tmp;
   }
 
+  // usado pelo music player: silencia a música ambiente da cena enquanto
+  // uma faixa do player está tocando, e retoma de onde parou ao fechar
+  let ambientWasPlaying = false;
+
+  function pauseAmbientMusic() {
+    if (!activeAudio.paused) {
+      ambientWasPlaying = true;
+      fadeAudio(activeAudio, activeAudio.volume, 0, FADE_MS);
+    }
+  }
+
+  function resumeAmbientMusic() {
+    if (!ambientWasPlaying) return;
+    ambientWasPlaying = false;
+    activeAudio.play().catch(() => {});
+    fadeAudio(activeAudio, 0, 1, FADE_MS);
+  }
+
   function buildSceneEl(id, scene) {
     const bgUrl = getSceneBackground(id, scene);
 
@@ -175,6 +193,18 @@
         b.addEventListener("click", () => {
           window.open(btn.href, "_blank", "noopener");
         });
+      } else if (btn.gallery) {
+        // abre uma galeria de imagens (definida em "galleries" no config.js)
+        b.setAttribute("aria-label", "Abrir galeria");
+        b.addEventListener("click", () => openGallery(btn.gallery));
+      } else if (btn.player) {
+        // abre um player de música (definido em "musicPlayers" no config.js)
+        b.setAttribute("aria-label", "Abrir player de música");
+        b.addEventListener("click", () => openMusicPlayer(btn.player));
+      } else if (btn.videoGallery) {
+        // abre uma galeria de cutscenes (definida em "videoGalleries" no config.js)
+        b.setAttribute("aria-label", "Abrir cutscenes");
+        b.addEventListener("click", () => openVideoGallery(btn.videoGallery));
       } else {
         // navegação interna, entre as páginas do site
         b.setAttribute("aria-label", "Ir para " + btn.target);
@@ -295,6 +325,429 @@
     currentSceneId = id;
     location.hash = id;
   }
+
+  // ---------- GALERIA DE IMAGENS + VISUALIZADOR EM TELA CHEIA ----------
+  // "galleries" vem do config.js (mesmo esquema de "scenes"): cada galeria
+  // tem um título e uma lista de imagens. Um botão em qualquer cena pode
+  // abrir uma galeria usando { gallery: "id-da-galeria", ... } em vez de
+  // "target" (navegação) ou "href" (link externo).
+  const galleryOverlay = document.getElementById("gallery-overlay");
+  const galleryTitleEl = document.getElementById("gallery-title");
+  const galleryGridEl = document.getElementById("gallery-grid");
+  const galleryCloseBtn = document.getElementById("gallery-close-btn");
+
+  const lightboxOverlay = document.getElementById("lightbox-overlay");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
+  const lightboxPrevBtn = document.getElementById("lightbox-prev-btn");
+  const lightboxNextBtn = document.getElementById("lightbox-next-btn");
+
+  let currentGalleryImages = [];
+  let currentLightboxIndex = 0;
+
+  function openGallery(id) {
+    const gallery = (typeof galleries !== "undefined") ? galleries[id] : null;
+    if (!gallery) {
+      console.warn("Galeria não encontrada no config.js:", id);
+      return;
+    }
+
+    currentGalleryImages = gallery.images || [];
+    galleryTitleEl.textContent = gallery.title || "";
+    galleryGridEl.innerHTML = "";
+
+    currentGalleryImages.forEach((src, index) => {
+      const thumb = document.createElement("button");
+      thumb.className = "gallery-thumb";
+      thumb.setAttribute("aria-label", "Ver imagem em tela cheia");
+
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = "";
+      thumb.appendChild(img);
+
+      thumb.addEventListener("click", () => openLightbox(index));
+      galleryGridEl.appendChild(thumb);
+    });
+
+    galleryOverlay.classList.add("visible");
+  }
+
+  function closeGallery() {
+    galleryOverlay.classList.remove("visible");
+  }
+
+  function openLightbox(index) {
+    currentLightboxIndex = index;
+    showLightboxImage();
+    lightboxOverlay.classList.add("visible");
+  }
+
+  function closeLightbox() {
+    lightboxOverlay.classList.remove("visible");
+  }
+
+  function showLightboxImage() {
+    lightboxImg.src = currentGalleryImages[currentLightboxIndex];
+  }
+
+  function showNextImage() {
+    if (!currentGalleryImages.length) return;
+    currentLightboxIndex = (currentLightboxIndex + 1) % currentGalleryImages.length;
+    showLightboxImage();
+  }
+
+  function showPrevImage() {
+    if (!currentGalleryImages.length) return;
+    currentLightboxIndex = (currentLightboxIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+    showLightboxImage();
+  }
+
+  galleryCloseBtn.addEventListener("click", closeGallery);
+  lightboxCloseBtn.addEventListener("click", closeLightbox);
+  lightboxNextBtn.addEventListener("click", showNextImage);
+  lightboxPrevBtn.addEventListener("click", showPrevImage);
+
+  // fecha clicando fora da imagem (mas não ao clicar na grade em si)
+  lightboxOverlay.addEventListener("click", (e) => {
+    if (e.target === lightboxOverlay) closeLightbox();
+  });
+
+  // atalhos de teclado: setas pra navegar, Esc pra fechar
+  document.addEventListener("keydown", (e) => {
+    if (lightboxOverlay.classList.contains("visible")) {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") showNextImage();
+      if (e.key === "ArrowLeft") showPrevImage();
+    } else if (galleryOverlay.classList.contains("visible")) {
+      if (e.key === "Escape") closeGallery();
+    } else if (playerOverlay.classList.contains("visible")) {
+      if (e.key === "Escape") closeMusicPlayer();
+    }
+  });
+
+  // ---------- MUSIC PLAYER (capa + next/prev) ----------
+  // "musicPlayers" vem do config.js: cada player tem uma lista de faixas
+  // ({ title, region, cover, src }). Um botão abre o player usando
+  // { player: "id-do-player", ... } em vez de "target"/"href"/"gallery".
+  const playerOverlay = document.getElementById("player-overlay");
+  const playerCloseBtn = document.getElementById("player-close-btn");
+  const playerCoverEl = document.getElementById("player-cover");
+  const playerTitleEl = document.getElementById("player-track-title");
+  const playerRegionEl = document.getElementById("player-track-region");
+  const playerAudio = document.getElementById("player-audio");
+  const playerProgressTrack = document.getElementById("player-progress-track");
+  const playerProgressFill = document.getElementById("player-progress-fill");
+  const playerTimeCurrent = document.getElementById("player-time-current");
+  const playerTimeDuration = document.getElementById("player-time-duration");
+  const playerPlayPauseBtn = document.getElementById("player-playpause-btn");
+  const playerPlayIcon = document.getElementById("player-play-icon");
+  const playerPauseIcon = document.getElementById("player-pause-icon");
+  const playerPrevBtn = document.getElementById("player-prev-btn");
+  const playerNextBtn = document.getElementById("player-next-btn");
+
+  let currentPlayerTracks = [];
+  let currentTrackIndex = 0;
+
+  function formatTime(seconds) {
+    if (!isFinite(seconds) || seconds < 0) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${pad(s)}`;
+  }
+
+  function openMusicPlayer(id) {
+    const player = (typeof musicPlayers !== "undefined") ? musicPlayers[id] : null;
+    if (!player || !player.tracks || !player.tracks.length) {
+      console.warn("Player não encontrado no config.js:", id);
+      return;
+    }
+
+    currentPlayerTracks = player.tracks;
+    pauseAmbientMusic();
+    playerOverlay.classList.add("visible");
+    loadTrack(0, true);
+  }
+
+  function closeMusicPlayer() {
+    playerOverlay.classList.remove("visible");
+    playerAudio.pause();
+    resumeAmbientMusic();
+  }
+
+  function loadTrack(index, autoplay) {
+    currentTrackIndex = index;
+    const track = currentPlayerTracks[currentTrackIndex];
+    if (!track) return;
+
+    playerCoverEl.src = track.cover || "";
+    playerTitleEl.textContent = track.title || "";
+    playerRegionEl.textContent = track.region || "";
+
+    playerAudio.src = track.src;
+    playerProgressFill.style.width = "0%";
+    playerTimeCurrent.textContent = "0:00";
+    playerTimeDuration.textContent = "0:00";
+
+    if (autoplay) {
+      playerAudio.play().catch(() => {});
+    }
+  }
+
+  function updatePlayPauseIcon() {
+    const playing = !playerAudio.paused && !playerAudio.ended;
+    playerPlayIcon.style.display = playing ? "none" : "";
+    playerPauseIcon.style.display = playing ? "" : "none";
+    playerPlayPauseBtn.setAttribute("aria-label", playing ? "Pausar" : "Tocar");
+  }
+
+  function togglePlayPause() {
+    if (playerAudio.paused) {
+      playerAudio.play().catch(() => {});
+    } else {
+      playerAudio.pause();
+    }
+  }
+
+  function playNextTrack() {
+    const next = (currentTrackIndex + 1) % currentPlayerTracks.length;
+    loadTrack(next, true);
+  }
+
+  function playPrevTrack() {
+    const prev = (currentTrackIndex - 1 + currentPlayerTracks.length) % currentPlayerTracks.length;
+    loadTrack(prev, true);
+  }
+
+  playerCloseBtn.addEventListener("click", closeMusicPlayer);
+  playerPlayPauseBtn.addEventListener("click", togglePlayPause);
+  playerNextBtn.addEventListener("click", playNextTrack);
+  playerPrevBtn.addEventListener("click", playPrevTrack);
+
+  playerAudio.addEventListener("play", updatePlayPauseIcon);
+  playerAudio.addEventListener("pause", updatePlayPauseIcon);
+  playerAudio.addEventListener("ended", playNextTrack);
+
+  playerAudio.addEventListener("loadedmetadata", () => {
+    playerTimeDuration.textContent = formatTime(playerAudio.duration);
+  });
+
+  playerAudio.addEventListener("timeupdate", () => {
+    if (!playerAudio.duration) return;
+    const pct = (playerAudio.currentTime / playerAudio.duration) * 100;
+    playerProgressFill.style.width = pct + "%";
+    playerTimeCurrent.textContent = formatTime(playerAudio.currentTime);
+  });
+
+  playerProgressTrack.addEventListener("click", (e) => {
+    if (!playerAudio.duration) return;
+    const rect = playerProgressTrack.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    playerAudio.currentTime = ratio * playerAudio.duration;
+  });
+
+  // ---------- GALERIA DE CUTSCENES (grade + vídeo em tela cheia com setas) ----------
+  // "videoGalleries" vem do config.js: cada galeria tem título e uma lista
+  // de vídeos ({ title, thumbnail, src }). Abre com { videoGallery: "id", ... }
+  // em vez de "target"/"href"/"gallery"/"player".
+  const videoGalleryOverlay = document.getElementById("video-gallery-overlay");
+  const videoGalleryTitleEl = document.getElementById("video-gallery-title");
+  const videoGalleryGridEl = document.getElementById("video-gallery-grid");
+  const videoGalleryCloseBtn = document.getElementById("video-gallery-close-btn");
+
+  const videoLightboxOverlay = document.getElementById("video-lightbox-overlay");
+  const videoLightboxPlayer = document.getElementById("video-lightbox-player");
+  const videoLightboxCloseBtn = document.getElementById("video-lightbox-close-btn");
+  const videoLightboxPrevBtn = document.getElementById("video-lightbox-prev-btn");
+  const videoLightboxNextBtn = document.getElementById("video-lightbox-next-btn");
+  const videoLightboxYoutubeWrap = document.getElementById("video-lightbox-youtube-wrap");
+
+  let currentVideoList = [];
+  let currentVideoIndex = 0;
+
+  function openVideoGallery(id) {
+    const gallery = (typeof videoGalleries !== "undefined") ? videoGalleries[id] : null;
+    if (!gallery) {
+      console.warn("Galeria de vídeos não encontrada no config.js:", id);
+      return;
+    }
+
+    currentVideoList = gallery.videos || [];
+    videoGalleryTitleEl.textContent = gallery.title || "";
+    videoGalleryGridEl.innerHTML = "";
+
+    currentVideoList.forEach((video, index) => {
+      const thumb = document.createElement("button");
+      thumb.className = "video-thumb";
+      thumb.setAttribute("aria-label", "Assistir " + (video.title || "cutscene"));
+
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "video-thumb-image-wrap";
+
+      const img = document.createElement("img");
+      img.src = video.thumbnail || (video.youtubeId ? `https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg` : "");
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      imgWrap.appendChild(img);
+
+      const playIcon = document.createElement("div");
+      playIcon.className = "video-thumb-play-icon";
+      playIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8V4z" fill="currentColor"/></svg>';
+      imgWrap.appendChild(playIcon);
+
+      thumb.appendChild(imgWrap);
+
+      const title = document.createElement("span");
+      title.className = "video-thumb-title";
+      title.textContent = video.title || "";
+      thumb.appendChild(title);
+
+      thumb.addEventListener("click", () => openVideoLightbox(index));
+      videoGalleryGridEl.appendChild(thumb);
+    });
+
+    // vídeos costumam ter som próprio, então silencia o ambiente da cena
+    // enquanto a galeria de cutscenes estiver aberta (grade ou vídeo)
+    pauseAmbientMusic();
+    videoGalleryOverlay.classList.add("visible");
+  }
+
+  function closeVideoGallery() {
+    videoGalleryOverlay.classList.remove("visible");
+    resumeAmbientMusic();
+  }
+
+  function openVideoLightbox(index) {
+    currentVideoIndex = index;
+    playCurrentVideo();
+    videoLightboxOverlay.classList.add("visible");
+  }
+
+  function closeVideoLightbox() {
+    videoLightboxOverlay.classList.remove("visible");
+    videoLightboxPlayer.pause();
+    videoLightboxPlayer.removeAttribute("src");
+    videoLightboxPlayer.load();
+    stopYoutubeVideo();
+  }
+
+  // ---------- suporte a cutscenes do YouTube ----------
+  // a API do YouTube só é carregada na primeira vez que uma cutscene com
+  // "youtubeId" é aberta — cutscenes com vídeo local nunca carregam isso
+  let ytApiReady = false;
+  let ytApiLoading = false;
+  let ytApiQueue = [];
+  let ytPlayer = null;
+
+  function ensureYoutubeApi(callback) {
+    if (window.YT && window.YT.Player) {
+      callback();
+      return;
+    }
+    ytApiQueue.push(callback);
+    if (ytApiLoading) return;
+    ytApiLoading = true;
+
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      ytApiReady = true;
+      ytApiQueue.forEach(cb => cb());
+      ytApiQueue = [];
+    };
+  }
+
+  function playYoutubeVideo(videoId) {
+    ensureYoutubeApi(() => {
+      if (ytPlayer) {
+        ytPlayer.loadVideoById(videoId);
+      } else {
+        ytPlayer = new YT.Player("video-lightbox-youtube", {
+          videoId: videoId,
+          playerVars: { autoplay: 1, rel: 0, modestbranding: 1 },
+          events: {
+            // reforça a referrerpolicy direto no iframe (evita Erro 153)
+            onReady: (e) => {
+              const iframe = e.target.getIframe();
+              if (iframe) iframe.referrerPolicy = "strict-origin-when-cross-origin";
+            },
+            // quando a cutscene do YouTube termina sozinha, fecha e volta
+            // pra grade, igual acontece com os vídeos locais
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.ENDED) closeVideoLightbox();
+            }
+          }
+        });
+      }
+    });
+  }
+
+  function stopYoutubeVideo() {
+    if (ytPlayer && typeof ytPlayer.stopVideo === "function") {
+      ytPlayer.stopVideo();
+    }
+  }
+
+  function playCurrentVideo() {
+    const video = currentVideoList[currentVideoIndex];
+    if (!video) return;
+
+    if (video.youtubeId) {
+      // cutscene do YouTube: esconde o <video> local, mostra o player embutido
+      videoLightboxPlayer.pause();
+      videoLightboxPlayer.removeAttribute("src");
+      videoLightboxPlayer.style.display = "none";
+      videoLightboxYoutubeWrap.classList.add("visible");
+      playYoutubeVideo(video.youtubeId);
+    } else {
+      // vídeo local: esconde o player do YouTube, mostra o <video>
+      stopYoutubeVideo();
+      videoLightboxYoutubeWrap.classList.remove("visible");
+      videoLightboxPlayer.style.display = "";
+      videoLightboxPlayer.src = video.src;
+      videoLightboxPlayer.currentTime = 0;
+      videoLightboxPlayer.play().catch(() => {});
+    }
+  }
+
+  function showNextVideo() {
+    if (!currentVideoList.length) return;
+    currentVideoIndex = (currentVideoIndex + 1) % currentVideoList.length;
+    playCurrentVideo();
+  }
+
+  function showPrevVideo() {
+    if (!currentVideoList.length) return;
+    currentVideoIndex = (currentVideoIndex - 1 + currentVideoList.length) % currentVideoList.length;
+    playCurrentVideo();
+  }
+
+  videoGalleryCloseBtn.addEventListener("click", closeVideoGallery);
+  videoLightboxCloseBtn.addEventListener("click", closeVideoLightbox);
+  videoLightboxNextBtn.addEventListener("click", showNextVideo);
+  videoLightboxPrevBtn.addEventListener("click", showPrevVideo);
+
+  // quando o vídeo termina sozinho, volta pra grade (não passa pra próxima)
+  videoLightboxPlayer.addEventListener("ended", closeVideoLightbox);
+
+  // fecha clicando fora do vídeo (mas não nos controles/setas)
+  videoLightboxOverlay.addEventListener("click", (e) => {
+    if (e.target === videoLightboxOverlay) closeVideoLightbox();
+  });
+
+  // atalhos de teclado: setas pra navegar entre cutscenes, Esc pra fechar
+  document.addEventListener("keydown", (e) => {
+    if (videoLightboxOverlay.classList.contains("visible")) {
+      if (e.key === "Escape") closeVideoLightbox();
+      if (e.key === "ArrowRight") showNextVideo();
+      if (e.key === "ArrowLeft") showPrevVideo();
+    } else if (videoGalleryOverlay.classList.contains("visible")) {
+      if (e.key === "Escape") closeVideoGallery();
+    }
+  });
 
   startBtn.addEventListener("click", () => {
     startOverlay.classList.add("hidden");
