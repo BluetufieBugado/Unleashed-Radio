@@ -445,6 +445,7 @@
   const playerPauseIcon = document.getElementById("player-pause-icon");
   const playerPrevBtn = document.getElementById("player-prev-btn");
   const playerNextBtn = document.getElementById("player-next-btn");
+  const playerLoopBtn = document.getElementById("player-loop-btn");
 
   let currentPlayerTracks = [];
   let currentTrackIndex = 0;
@@ -518,6 +519,15 @@
     const prev = (currentTrackIndex - 1 + currentPlayerTracks.length) % currentPlayerTracks.length;
     loadTrack(prev, true);
   }
+
+  // repete a faixa atual em loop (não passa pra próxima quando termina)
+  function toggleLoop() {
+    playerAudio.loop = !playerAudio.loop;
+    playerLoopBtn.classList.toggle("active", playerAudio.loop);
+    playerLoopBtn.setAttribute("aria-label", playerAudio.loop ? "Repetir música: ativado" : "Repetir música: desativado");
+  }
+
+  playerLoopBtn.addEventListener("click", toggleLoop);
 
   playerCloseBtn.addEventListener("click", closeMusicPlayer);
   playerPlayPauseBtn.addEventListener("click", togglePlayPause);

@@ -652,15 +652,47 @@ body {
   transition: transform 150ms ease, color 150ms ease;
 }
 
+/* loop começa desligado por padrão — ícone mais apagado que os outros
+   controles até a pessoa ativar */
+#player-loop-btn {
+  color: rgba(255, 255, 255, 0.45);
+}
+
 #player-controls button:hover {
   color: #fff;
   transform: scale(1.08);
 }
 
 #player-prev-btn svg,
-#player-next-btn svg {
+#player-next-btn svg,
+#player-loop-btn svg {
   width: 22px;
   height: 22px;
+}
+
+#player-loop-btn.active {
+  color: #fff;
+}
+
+#player-loop-btn.active svg path {
+  stroke-width: 2.4;
+}
+
+/* bolinha discreta indicando "repetir ligado", pra ficar claro mesmo
+   sem comparar a cor do ícone com o resto dos controles */
+#player-loop-btn.active::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  margin-top: 16px;
+  margin-left: -3px;
+}
+
+#player-loop-btn {
+  position: relative;
 }
 
 #player-playpause-btn {
