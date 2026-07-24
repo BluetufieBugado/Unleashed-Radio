@@ -90,7 +90,17 @@ body {
   pointer-events: none;
 }
 
-.scene-btn:hover,
+/* :hover fica isolado em telas que realmente têm mouse — em telas de
+   toque, um :hover "gruda" depois do toque até a pessoa tocar em outro
+   lugar, fazendo o botão tocado ficar ampliado/com sombra por cima dos
+   vizinhos até então (dá a impressão de elementos "se sobrepondo") */
+@media (hover: hover) and (pointer: fine) {
+  .scene-btn:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.65));
+  }
+}
+
 .scene-btn:focus-visible {
   transform: translate(-50%, -50%) scale(1.08);
   filter: drop-shadow(0 6px 20px rgba(0,0,0,0.65));
@@ -404,6 +414,12 @@ body {
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  /* sem isso, quando o conteúdo é mais alto que o espaço disponível
+     (comum no celular, com dezenas de miniaturas), o motor de grid do
+     navegador pode colapsar a altura das linhas em vez de simplesmente
+     rolar — as miniaturas ficam esmagadas/sobrepostas umas nas outras */
+  grid-auto-rows: min-content;
+  align-content: start;
   gap: 14px;
 }
 
@@ -418,7 +434,13 @@ body {
   transition: transform 200ms ease, border-color 200ms ease;
 }
 
-.gallery-thumb:hover,
+@media (hover: hover) and (pointer: fine) {
+  .gallery-thumb:hover {
+    transform: scale(1.03);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
 .gallery-thumb:focus-visible {
   transform: scale(1.03);
   border-color: rgba(255, 255, 255, 0.4);
@@ -508,6 +530,12 @@ body {
   pointer-events: none;
   transition: opacity 300ms ease;
   padding: 24px;
+  /* com a tela deitada (pouca altura), o card do player (capa quadrada +
+     título + progresso + controles) pode passar da altura da tela. Antes
+     isso fazia o topo/fundo do card ficarem cortados pra fora da tela —
+     "cobrindo tudo". Com overflow-y:auto aqui, se ainda sobrar conteúdo
+     ele fica rolável em vez de cortado */
+  overflow-y: auto;
 }
 
 #player-overlay.visible {
@@ -538,16 +566,26 @@ body {
 #player-card {
   width: 100%;
   max-width: 360px;
+  /* nunca deixa o card ficar mais alto que a área visível do overlay —
+     junto com o overflow-y do #player-overlay, garante que nada fique
+     cortado pra fora da tela em telas baixas (celular deitado) */
+  max-height: 100%;
+  overflow-y: auto;
   border-radius: 20px;
   padding: 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  flex-shrink: 0;
 }
 
 #player-cover {
-  width: 100%;
+  /* em vez de sempre ocupar 100% da largura do card, a capa também leva
+     em conta a altura da tela (vh) — assim, numa tela baixa/deitada ela
+     encolhe sozinha em vez de forçar o card inteiro a estourar a altura
+     disponível. Em telas normais/altas, continua do tamanho de sempre */
+  width: min(100%, 46vh);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 12px;
@@ -700,6 +738,14 @@ body {
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* mesmo problema do #gallery-grid, mas aqui o efeito era mais grave:
+     como a altura de .video-thumb vem do conteúdo (imagem + título),
+     e não de um aspect-ratio direto no próprio item do grid, o
+     navegador colapsava as linhas quase a 0px de altura sempre que a
+     lista de cutscenes era mais alta que a área visível — por isso as
+     miniaturas viravam "linhas" finas */
+  grid-auto-rows: min-content;
+  align-content: start;
   gap: 16px;
 }
 
@@ -714,7 +760,13 @@ body {
   transition: transform 200ms ease, border-color 200ms ease;
 }
 
-.video-thumb:hover,
+@media (hover: hover) and (pointer: fine) {
+  .video-thumb:hover {
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
 .video-thumb:focus-visible {
   transform: scale(1.02);
   border-color: rgba(255, 255, 255, 0.4);
